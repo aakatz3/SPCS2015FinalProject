@@ -1,0 +1,17 @@
+
+function K = intrinsicCameraMatrix()
+    f = 1;      %Focus distance
+    px = 1;     %
+    py = 1;
+    %sx = 0.000000114;
+    %sy = 0.000000114;
+    sx = 10;    %Pixel width
+    sy = 10;    
+    mx = inv(sx);
+    my = inv(sy);
+    ax = f*mx;
+    ay = f*my;
+    x0 = mx*px;
+    y0 = my*py;
+    K = [ax, 0,x0; 0, ay, y0; 0,0,1];
+end
