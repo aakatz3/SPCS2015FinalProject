@@ -1,2 +1,3 @@
-function img = toMatLab()
+function img = toMatLab(img)
+
 end

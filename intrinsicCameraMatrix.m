@@ -1,12 +1,12 @@
 
 function K = intrinsicCameraMatrix()
-    f = 1;              %Focus distance
+    f = 0.05;           %Focus distance
     px = 0;             %Point of intersection of principal axis and image plane (x)
     py = 0;             %Point of intersection of principal axis and image plane (y)
-    %sx = 0.000000114;  %Canon scale pixel width
-    %sy = 0.000000114;  %Canon scale pixel height
-    sx = 10;            %Pixel width
-    sy = 10;            %Pixel Height
+%     sx = 0.000000114;   %Canon scale pixel width
+%     sy = 0.000000114;   %Canon scale pixel height
+    sx = 0.5;           %Pixel width
+    sy = 0.5;           %Pixel Height
     mx = inv(sx);
     my = inv(sy);
     ax = f*mx;
