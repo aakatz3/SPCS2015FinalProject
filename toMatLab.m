@@ -1,3 +1,3 @@
-function img = toMatLab(img)
-
+function matLabCoord = toMatLab(imagePlaneCoord)
+    
 end
