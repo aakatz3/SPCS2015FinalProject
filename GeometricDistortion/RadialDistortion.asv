@@ -32,45 +32,30 @@ imshow(newImg,[]);
 % imshow(uint8(colorImg));
 end
 function newImg = radiallyDistort(img)
-
 newImg = 255 * ones(size(img,1),size(img,2));
-% fid = fopen('test.txt', 'w');
+fid = fopen('test.txt', 'w');
 rX = mean([1,size(img,1)]);
 rY = mean([1,size(img,2)]);
-rows = zeros(size(img,1),size(img,2));
-cols = zeros(size(img,1),size(img,2));
-for col = 1 : size(img,2)
-    for row = 1 : size(img,1)
-        rows(row,col) = col-(rY);
-    end
-end
-for row = 1 : size(img,1)
-    for col = 1 : size(img,2)
-        cols(row,col) = row-(rX);
-    end
-end
 scaleR = 0.25;
-maxR = norm([(rX-1)/(size(img,1)),...
-            (rY-1)/(size(img,2))]);
 for row = 1:size(img,1)
     for col = 1:size(img,2)
-        r = norm([(rX-row)/(size(img,1)),...
-            (rY-col)/(size(img,2))])/maxR;
+        r = norm([(rX-row)/(scaleR*size(img,1)),...
+            (rY-col)/(scaleR*size(img,2))]);
         
         newCoords = L(r);
-        newImg(row,col) = interp2(rows,cols,img, col/newCoords, row/newCoords);
-%         a = [row, col, r, newCoords];
-%         fprintf(fid, '%f %f %f %f\r\n', a);
+        newImg(row,col) = interp2(img, col/newCoords, row/newCoords);
+        %a = [row, col, r, newCoords];
+        %fprintf(fid, '%f %f %f %f %f %f %f\r\n', a);
     end
 end
-% fclose(fid);
+fclose(fid);
 end
 function out = L(r)
-k1 = 1.03689;
-k2 = 0.0487908;
-k3 = 0.0116894;
-k4 = 0.00841614;
-out = 1 + (k1 * r) + (k2 * (r^2)) + (k3 * (r^3)) + (k4 * (r^4));
-% out = 1 + (k1 * r);
+k1 = 0.103689;
+k2 = 0.00487908;
+k3 = 0.00116894;
+k4 = 0.000841614;
+% out = 1 + (k1 * r) + (k2 * (r^2)) + (k3 * (r^3)) + (k4 * (r^4));
+out = 1 + (k1 * r);
 
 end
