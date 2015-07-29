@@ -1,35 +1,8 @@
-function RadialDistortion()
-% scale = 0.10;
-scale = 1.0;
-% scale = 0.17;
-% scale = 0.0425;
-% scale = 0.125;
-% bscale = 0.25;
-% imgName = '1010.bmp';
-imgName = 'bac.jpg';
-% imgName = 'cat.jpg';
-% imgName = 'smallbac.jpg';
-% imgName = 'ms.png';
-% imgName = 'bliss.jpg';
-img = imresize(rgb2gray(imread(imgName)),scale);
-% color = imresize(imread(imgName),scale);
-figure
-imshow(img,[]);
-% figure
-% imshow(color);
-newImg = radiallyDistort(img);
-figure
-imshow(newImg,[]);
-%disp (newImg);
-%disp (img);
-%Color
-% red = radiallyDistort(color(:,:,1));
-% green = radiallyDistort(color(:,:,2));
-% blue = radiallyDistort(color(:,:,3));
-% colorImg = cat(3,red,green,blue);
-% figure
-% imshow(uint8(colorImg));
+function partA()
+img = imresize(rgb2gray(imread('bac.jpg')),0.25);
+imshow(radiallyDistort(img),[]);
 end
+
 function newImg = radiallyDistort(img)
 sizeImg = size(img);
 imgR = ones(sizeImg(1),sizeImg(2));
@@ -55,7 +28,7 @@ for row = 1:sizeImg(1)
         r = norm([(col-rX)/(sizeImg(1)),...
             (row-rY)/(sizeImg(2))])/maxR;
         imgR(row,col) = r;
-        newCoords = L(r);
+        newCoords = cos(r)^4;
 %         xq = abs(col - floor(sizeImg(2)/2))/(newCoords);
 %         yq = abs(row - floor(sizeImg(1)/2))/(newCoords);
         xq = col/newCoords;
@@ -93,13 +66,4 @@ imshow(imgyq,[]);
 title('yq');
 min(min(imgyq))
 max(max(imgyq))
-end
-function out = L(r)
- k1 = 1.03689;
-k2 = 0.0487908;
-k3 = 0.0116894;
-k4 = 0.00841614;
-out = 1 + (k1 * r) + (k2 * (r^2)) + (k3 * (r^3)) + (k4 * (r^4));
-% out = 1 + (k1 * r);
-
 end
