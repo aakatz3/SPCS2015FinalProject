@@ -1,10 +1,13 @@
 function RadialDistortion()
+clc
+clear all
+close all
 % scale = 0.10;
-scale = 1.0;
+% scale = 1.0;
 % scale = 0.17;
 % scale = 0.0425;
-% scale = 0.125;
-% bscale = 0.25;
+scale = 0.125;
+% scale = 0.25
 % imgName = '1010.bmp';
 imgName = 'bac.jpg';
 % imgName = 'cat.jpg';
@@ -32,74 +35,73 @@ imshow(newImg,[]);
 end
 function newImg = radiallyDistort(img)
 sizeImg = size(img);
+imgL = ones(sizeImg(1), sizeImg(2));
 imgR = ones(sizeImg(1),sizeImg(2));
-imgxq = ones(sizeImg(1),sizeImg(2));
-imgyq = ones(sizeImg(1),sizeImg(2));
+xq = ones(sizeImg(1),sizeImg(2));
+yq = ones(sizeImg(1),sizeImg(2));
 newImg = 255 * ones(sizeImg(1),sizeImg(2));
 %fid = fopen('vals1.csv', 'w');
 %fprintf(fid, 'row,col,r,newCoords,xq,yq\r\n');
 rX = mean([1,sizeImg(1)]);
 rY = mean([1,sizeImg(2)]);
 maxR = norm([(rX-1)/(sizeImg(1)),...
-            (rY-1)/(sizeImg(2))]);
+    (rY-1)/(sizeImg(2))]);
 X = zeros(sizeImg(1),sizeImg(2));
 Y = zeros(sizeImg(1),sizeImg(2));
-% for row = 1 : sizeImg(1)
-%     for col = 1 : sizeImg(2)
-%         Y(row,col) = (row);
-%         X(row,col) = (col);
-%     end
-% end
 for row = 1:sizeImg(1)
     for col = 1:sizeImg(2)
-        r = norm([(col-rX)/(sizeImg(1)),...
-            (row-rY)/(sizeImg(2))])/maxR;
+        X(row,col) = (col);
+        Y(row,col) = (row);
+        r = norm([(col-rY)/(sizeImg(1)),...
+            (row-rX)/(sizeImg(2))])/maxR;
         imgR(row,col) = r;
         newCoords = L(r);
-%         xq = abs(col - floor(sizeImg(2)/2))/(newCoords);
-%         yq = abs(row - floor(sizeImg(1)/2))/(newCoords);
-        xq = col/newCoords;
-        yq = row/newCoords;
-        imgxq(row,col) = xq;
-        imgyq(row,col) = yq;
-         newImg(row,col) = interp2(img, xq, yq);
-%        newImg(row,col) = interp2(X,Y,img, xq, yq);
-%         a = [row, col, r, newCoords,xq,yq];
-%        fprintf(fid, '%f,%f,%f,%f,%f,%f\r\n', a);
+        imgL(row,col) = newCoords;
+        %         xq = abs(col - floor(sizeImg(2)/2))/(newCoords);
+        %         yq = abs(row - floor(sizeImg(1)/2))/(newCoords);
+        xq(row,col) = col/newCoords;
+        yq(row,col) = row/newCoords;
+        %         newImg(row,col) = interp2(img, xq, yq);
+        
+        %         a = [row, col, r, newCoords,xq,yq];
+        %        fprintf(fid, '%f,%f,%f,%f,%f,%f\r\n', a);
     end
 end
+newImg = interp2(X,Y,img, xq,yq);
+figure
+imshow(imgL,[]);
 %fclose(fid);
-figure
-imshow(imgR,[]);
-title('R');
-disp(imgR);
-figure
-imshow(X,[]);
-title('X');
-min(min(X))
-max(max(X))
-figure
-imshow(Y,[]);
-title('Y');
-min(min(Y))
-max(max(Y))
-figure
-imshow(imgxq,[]);
-title('xq');
-min(min(imgxq))
-max(max(imgxq))
-figure
-imshow(imgyq,[]);
-title('yq');
-min(min(imgyq))
-max(max(imgyq))
+% figure
+% imshow(imgR,[]);
+% title('R');
+% disp(imgR);
+% figure
+% imshow(X,[]);
+% title('X');
+% min(min(X))
+% max(max(X))
+% figure
+% imshow(Y,[]);
+% title('Y');
+% min(min(Y))
+% max(max(Y))
+% figure
+% imshow(xq,[]);
+% title('xq');
+% min(min(xq))
+% max(max(xq))5
+% figure
+% imshow(yq,[]);
+% title('yq');
+% min(min(yq))
+% max(max(yq))
 end
 function out = L(r)
- k1 = 1.03689;
-k2 = 0.0487908;
-k3 = 0.0116894;
-k4 = 0.00841614;
+k1 = 10 * 0.103689;
+k2 = 10 * 0.00487908;
+k3 = 10 * 0.00116894;
+k4 = 10 * 0.000841614;
 out = 1 + (k1 * r) + (k2 * (r^2)) + (k3 * (r^3)) + (k4 * (r^4));
 % out = 1 + (k1 * r);
-
+%out = 2;
 end
