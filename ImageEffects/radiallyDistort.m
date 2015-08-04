@@ -1,4 +1,5 @@
 function newImg = radiallyDistort(img, factor)
+%Create variables
 sizeImg = size(img);
 xq = ones(sizeImg(1),sizeImg(2));
 yq = ones(sizeImg(1),sizeImg(2));
@@ -6,6 +7,8 @@ rX = mean([1,sizeImg(2)]);
 rY = mean([1,sizeImg(1)]);
 X = zeros(sizeImg(1),sizeImg(2));
 Y = zeros(sizeImg(1),sizeImg(2));
+
+%Compute values for r, xq, yq, X, and Y
 for row = 1:sizeImg(1)
     for col = 1:sizeImg(2)
         X(row,col) = col-rX;
@@ -16,14 +19,19 @@ for row = 1:sizeImg(1)
         yq(row,col) = Y(row,col) * newCoords;
     end
 end
+
+%Normalize variables
 maxX = max( X(:) );
 maxY = max( Y(:) );
 X = X ./ maxX;
 Y = Y ./ maxY;
 xq = xq ./ maxX;
 yq = yq ./ maxY;
+
+%Preform radial distortion using interpolation
 newImg = round(interp2(X,Y,double(img), xq,yq));
 end
+
 function out = L(r, factor)
     k1 = factor * 0.10103689;
     k2 = factor * 0.00000487908;
